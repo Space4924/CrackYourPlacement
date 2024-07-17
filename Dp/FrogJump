@@ -1,0 +1,23 @@
+class Solution {
+public:
+bool Clone(int prev,int index,unordered_map<int,int>&mp,vector<int>&stones,vector<vector<int>>&dp){
+    if(index>=stones[stones.size()-1])return true;
+    bool ans=false;
+    if(dp[index][prev]!=-1)return dp[index][prev];
+    if(prev!=0 && mp[index+prev])ans=ans|Clone(prev,index+prev,mp,stones,dp);
+    if(mp[index+prev+1])ans=ans|Clone(prev+1,index+prev+1,mp,stones,dp);
+    if(prev<=1 && mp[index+prev-1])ans=ans|Clone(prev-1,index+prev-1,mp,stones,dp);
+    return dp[index][prev]=ans;
+}
+    bool canCross(vector<int>& stones) {
+        
+        int n=stones.size();
+        int last=stones[n-1];
+        vector<vector<int>>dp(n+1,vector<int>(last+1,-1));
+        unordered_map<int,int>mp;
+        for(int i=0;i<n;i++){
+            mp[stones[i]]++;
+        }
+        return Clone(0,0,mp,stones,dp);
+    }
+};
